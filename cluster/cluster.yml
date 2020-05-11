@@ -1,0 +1,47 @@
+#@ load ("@ytt:data", "data")
+---
+apiVersion: run.tanzu.vmware.com/v1alpha1
+kind: TanzuKubernetesCluster
+metadata:
+  name: #@ data.values.name
+  namespace: #@ data.values.namespace
+spec:
+  distribution:
+    version: #@ data.values.version
+  topology:
+    controlPlane:
+      count: #@ data.values.controlPlane.count 
+      class: #@ data.values.controlPlane.vmClass 
+      #@ if data.values.controlPlane.storageClass:
+      storageClass: #@ data.values.controlPlane.storageClass
+      #@ else:
+      storageClass: #@ data.values.storageClass
+      #@ end
+    workers:
+      count: #@ data.values.workers.count 
+      class: #@ data.values.workers.vmClass 
+      #@ if data.values.workers.storageClass:
+      storageClass: #@ data.values.workers.storageClass
+      #@ else:
+      storageClass: #@ data.values.storageClass
+      #@ end
+  settings:
+    network:
+      cni:
+        name: #@ data.values.cni.name 
+      services:
+        cidrBlocks: #@ data.values.services.cidrBlocks 
+      pods:
+        cidrBlocks: #@ data.values.pods.cidrBlocks 
+    storage:
+      #@ if data.values.storage.classes:
+      classes: #@ data.values.storage.classes
+      #@ else:
+      classes:
+      - #@ data.values.storageClass
+      #@ end
+      #@ if data.values.storage.defaultClass:
+      defaultClass: #@ data.values.storage.defaultClass
+      #@ else:
+      defaultClass: #@ data.values.storageClass
+      #@ end

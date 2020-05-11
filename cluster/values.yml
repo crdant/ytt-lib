@@ -1,0 +1,28 @@
+#@data/values
+---
+name: 
+namespace: 
+storageClass: 
+
+version: v1.16
+
+controlPlane:
+  count: 1
+  vmClass: best-effort-medium 
+  storageClass: 
+
+workers:
+  count: 3 
+  vmClass: best-effort-medium 
+  storageClass: 
+
+cni:
+  name: calico
+services:
+  cidrBlocks: ["198.51.100.0/12"]
+pods:
+    cidrBlocks: ["192.0.2.0/16"]
+    
+storage:
+  classes: 
+  defaultClass: 

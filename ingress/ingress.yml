@@ -1,0 +1,43 @@
+#@ load ("@ytt:data", "data")
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: #@ data.values.name
+  #@ if/end data.values.namespace:
+  namespace: #@ data.values.namespace
+  annotations:
+    #@ if data.values.tls:
+    cert-manager.io/cluster-issuer: #@ data.values.issuer
+    kubernetes.io/tls-acme: "true"
+    #@ end
+    #@ if data.values.ingress == "contour":
+    kubernetes.io/ingress.class: contour
+    #@ elif data.values.ingress == "nsx":
+    kubernetes.io/ingress.class: nsx
+    ncp/use-regex: "true"
+    ncp/http-redirect: "true"
+    #@ end
+spec:
+  rules:
+  - host: #@ data.values.host 
+    http:
+      paths:
+      - backend:
+          serviceName: #@ data.values.service.name
+          servicePort: #@ data.values.service.port
+        #@ if data.values.ingress == "contour":
+        path: /(.*)
+        #@ else:
+        path: /
+        #@ end
+  #@ if data.values.tls:
+  tls:
+  - hosts:
+    - #@ data.values.host
+    #@ if data.values.secret:
+    secretName: #@ data.values.secret
+    #@ else:
+    secretName: #@ "{}-tls".format(data.values.host)
+    #@ end
+  #@ end

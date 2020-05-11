@@ -1,0 +1,11 @@
+#@data/values
+---
+namespace: cert-manager
+production: true
+staging: true
+
+certmanager:
+  solver:
+    clouddns:
+      keyfile: ""
+

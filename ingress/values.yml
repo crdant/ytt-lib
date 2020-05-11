@@ -1,0 +1,14 @@
+#@data/values
+---
+name:
+namespace:
+
+ingress: concour
+tls: true
+issuer: letsencrypt-production
+
+host:
+service:
+  name:
+  port:
+secret:

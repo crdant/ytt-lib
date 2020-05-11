@@ -1,0 +1,12 @@
+#@ load ("@ytt:data", "data")
+---
+apiVersion: "postgres.pivotal.io/v1"
+kind: "PostgresInstance"
+metadata:
+  name: #@ data.values.name
+  namespace: #@ data.values.namespace
+spec:
+  memory: #@ data.values.memory 
+  cpu: #@ data.values.cpu 
+  storageClassName: #@ data.values.storageClassName
+  storageSize: #@ data.values.storageSize 
