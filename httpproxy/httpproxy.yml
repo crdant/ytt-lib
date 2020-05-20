@@ -1,0 +1,27 @@
+#@ load ("@ytt:data", "data")
+---
+apiVersion: extensions/v1beta1
+kind: HTTPProxy
+metadata:
+  name: #@ data.values.name
+  #@ if/end data.values.namespace:
+  namespace: #@ data.values.namespace
+spec:
+  virtualhost:
+    fqdn: #@ data.values.host 
+    #@ if data.values.tls:
+    tls:
+      #@ if data.values.secret:
+      secretName: #@ data.values.secret
+      #@ else:
+      secretName: #@ "{}-tls".format(data.values.host)
+      #@ end
+    #@ end
+  routes:
+  - conditions:
+    - prefix: /
+    #@ if/end data.values.websockets:
+    enableWebSockets: true
+    services:
+    - name: #@ data.values.service.name
+      port: #@ data.values.service.port
