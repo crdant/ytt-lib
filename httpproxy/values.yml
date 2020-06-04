@@ -11,5 +11,5 @@ issuer: letsencrypt-production
 host:
 service:
   name:
-  port:
+  port: 443
 secret:
