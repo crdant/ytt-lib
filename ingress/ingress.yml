@@ -1,6 +1,6 @@
 #@ load ("@ytt:data", "data")
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: #@ data.values.name
@@ -24,13 +24,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: #@ data.values.service.name
-          servicePort: #@ data.values.service.port
-        #@ if data.values.ingress == "contour":
-        path: /(.*)
-        #@ else:
+          service:
+            name: #@ data.values.service.name
+            port: 
+              number: #@ data.values.service.port
+        pathType: Prefix
         path: /
-        #@ end
   #@ if data.values.tls:
   tls:
   - hosts:
