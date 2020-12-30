@@ -1,0 +1,8 @@
+#@ load ("@ytt:overlay", "overlay")
+#@ load ("@ytt:data", "data")
+
+#@overlay/match by=overlay.all,expects="1+"
+---
+metadata:
+  #@overlay/match by=overlay.subset(None),expects="0+"
+  namespace: #@ data.values.namespace
