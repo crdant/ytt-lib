@@ -1,0 +1,16 @@
+#@ load ("@ytt:data", "data")
+#@ if/end data.values.tls and not data.values.secret:
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: #@ "{}-tls".format(data.values.host)
+  namespace: #@ data.values.namespace
+spec:
+  secretName: #@ "{}-tls".format(data.values.host)
+  dnsNames:
+  - #@ data.values.host 
+  issuerRef:
+    name: #@ data.values.issuer 
+    kind: ClusterIssuer
+    group: cert-manager.io
